@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserStatus {
+  unverified
+  active
+  blocked
+}
+
+model User {
+  id                String     @id @default(uuid())
+  name              String
+  email             String     // we'll enforce uniqueness in SQL migration (lower(email))
+  passwordHash      String     @map("password_hash")
+  status            UserStatus @default(unverified)
+
+  createdAt         DateTime   @default(now()) @map("created_at")
+  lastLoginAt       DateTime?  @map("last_login_at")
+  emailVerifiedAt   DateTime?  @map("email_verified_at")
+
+  verificationToken String?    @map("verification_token")
+
+  @@map("users")
+  @@index([lastLoginAt(sort: Desc)])
+}
