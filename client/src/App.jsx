@@ -1,38 +1,26 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-
-function Home() {
-  return (
-    <div className="container py-4">
-      <h1 className="h4">User Admin Panel</h1>
-      <p className="text-muted">Scaffold is up.</p>
-      <div className="d-flex gap-2">
-        <Link className="btn btn-outline-primary" to="/login">
-          Login
-        </Link>
-        <Link className="btn btn-outline-secondary" to="/register">
-          Register
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-function Placeholder({ title }) {
-  return (
-    <div className="container py-4">
-      <h1 className="h4">{title}</h1>
-    </div>
-  );
-}
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Toasts from "./ui/Toasts";
+import RequireAuth from "./auth/RequireAuth";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ConfirmPage from "./pages/ConfirmPage";
+import UsersPage from "./pages/UsersPage";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Toasts />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Placeholder title="Login" />} />
-        <Route path="/register" element={<Placeholder title="Register" />} />
-        <Route path="/users" element={<Placeholder title="Users" />} />
+        <Route path="/" element={<Navigate to="/users" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/confirm" element={<ConfirmPage />} />
+
+        <Route element={<RequireAuth />}>
+          <Route path="/users" element={<UsersPage />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/users" replace />} />
       </Routes>
     </BrowserRouter>
   );
