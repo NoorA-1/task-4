@@ -21,7 +21,20 @@ export default function RegisterPage() {
       );
       nav("/login");
     } catch (err) {
-      const msg = err?.response?.data?.message || "Registration failed.";
+      console.log("REGISTER ERROR:", {
+        message: err.message,
+        status: err?.response?.status,
+        data: err?.response?.data,
+        headers: err?.response?.headers,
+      });
+
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        (typeof err?.response?.data === "string" ? err.response.data : null) ||
+        err?.message ||
+        "Registration failed.";
+
       flash(msg, "danger");
     } finally {
       setBusy(false);
