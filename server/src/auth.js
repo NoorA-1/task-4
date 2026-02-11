@@ -33,7 +33,6 @@ export async function register(req, res) {
       select: { id: true, email: true, status: true },
     });
 
-    // Async email: for today, just log link (non-blocking)
     const confirmUrl = `${config.apiBaseUrl}/auth/confirm?token=${verificationToken}`;
     console.log("[CONFIRM LINK]", confirmUrl);
 
